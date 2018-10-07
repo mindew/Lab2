@@ -1,0 +1,18 @@
+﻿Work Plan
+* Since all of our group members are planning to attend SWE before the deadline, we decided to commit ourselves more than other teams during the earlier period of the project.
+* Understanding lab
+* Input Conditioner - Allison (3 hours) -- Tuesday, October 9th
+   * Test Bench - Minju (3 hours) -- Thursday, October 11th
+* Shift Register - Vicky (3 hours) -- Tuesday, October 9th
+   * Test Bench - Minju (3 hours) -- Thursday, October 11th
+* Midpoint on FPGA (2 hours) -- Thursday, October 11th
+   *  test sequence -- Thursday, October 11th
+* Midpoint Discussion with Professor Oct 12th
+* Finite State Machine (2 hours) --  Tuesday, October 16th
+   * The overall idea -- Friday, October 12th
+   * Test Bench -- Tuesday, October 16th
+* Memory Integration (3 hours) -- Tuesday, October 16th
+   * Test Bench -- Tuesday, October 16th
+* Final Report (4 hours) -- Wednesday, October 17th
+   * Test Strategies (1 hour) -- Wednesday, October 16th
+   * Describe design (1.5 hours) -- Wednesday, October 16th
