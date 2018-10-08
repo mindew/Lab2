@@ -35,4 +35,21 @@ output reg  negativeedge    // 1 clk pulse at falling edge of conditioned
         synchronizer0 <= noisysignal;
         synchronizer1 <= synchronizer0;
     end
+
+
+
+    // At the positive edge, set positivedge to high
+    always @(posedge clk) begin
+        positiveedge <= 1;
+        negativeedge <= 0;
+    end
+
+    // At the negative edge, set negativedge to high
+    always @(negedge clk) begin
+        positiveedge <= 0;
+        negativeedge <= 1;
+    end
+
+
+
 endmodule
