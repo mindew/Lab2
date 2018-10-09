@@ -22,9 +22,9 @@ module testConditioner();
         .dutpassed(dutpassed),
         .clk(clk),
         .noisysignal(pin),
-	    .conditioned(conditioned),
-	    .positiveedge(rising),
-	    .negativeedge(falling)
+        .conditioned(conditioned),
+        .positiveedge(rising),
+        .negativeedge(falling)
     );
 
     inputcondtestbench tester
