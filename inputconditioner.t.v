@@ -27,15 +27,18 @@ module testConditioner();
         $dumpfile("inputconditioner.vcd");
         $dumpvars();
 
-        clk=clk;pin=1;#1000
-        $display("%b  %b  %b ",  conditioned, rising, falling);
+        // // SB Indicates should be
+        // // Test case 1, conditioned 1, posedge 1, negedge 0    
+        // $display("Conditioned | Posedge | Negedge | SB Conditioned | SB Posedge | SB Negedge");
+        // clk=clk;pin=1;#1000
+        // $display("%b | %b | %b | 1 | 1 | 0",  conditioned, rising, falling);
 
+
+
+        // Test case 2, conditioned 2, posedge 1, 
         $finish();
 
 
     end
-    // Your Test Code
-    // Be sure to test each of the three conditioner functions:
-    // Synchronization, Debouncing, Edge Detection
     
 endmodule
