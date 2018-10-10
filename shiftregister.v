@@ -19,21 +19,23 @@ output reg             serialDataOut       // Positive edge synchronized
 );
 
     reg [width:0]        shiftregistertemp;
+    reg [width-1:0]      shiftregistermem;
     always @(posedge clk) begin
 
       if (parallelLoad) begin
         // take the value of parallelDataIn when parallelLoad is asserted
-        parallelDataOut <= parallelDataIn;
+        shiftregistermem <= parallelDataIn;
       end
       else if (peripheralClkEdge) begin
         // advance the shift register one position, putting serialData in lsb
-        shiftregistertemp <= {parallelDataIn, serialDataIn};
+        shiftregistertemp <= {parallelDataOut, serialDataIn};
         // get rid of the msb that has been shifted out of the frame
-        parallelDataOut <= shiftregistertemp[width-1:0];
+        shiftregistermem <= shiftregistertemp[width-1:0];
       end
 
       // store the msb in serialDataOut
       serialDataOut <= parallelDataOut[width-1];
+      parallelDataOut <= shiftregistermem;
 
     end
 

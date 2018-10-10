@@ -1,8 +1,6 @@
 `include "shiftregister.v"
-//------------------------------------------------------------------------
+`timescale 1ns/1ps
 // Shift Register test bench
-//------------------------------------------------------------------------
-
 module testshiftregister();
 
     reg             clk;
@@ -22,8 +20,15 @@ module testshiftregister();
     		           .parallelDataOut(parallelDataOut),
     		           .serialDataOut(serialDataOut));
 
+    initial clk=0;
+    always #10 clk=!clk;
+
+
     initial begin
-    	// Your Test Code
+    	parallelDataIn = 8'b11001100;
+        parallelLoad = 1'b1;
+        peripheralClkEdge = 1'b1;
+        serialDataIn = 1'b1;
     end
 
 endmodule
