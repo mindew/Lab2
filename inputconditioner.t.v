@@ -47,19 +47,18 @@ module testConditioner();
 endmodule
 
 
-<<<<<<< HEAD
-        // // SB Indicates should be
-        // // Test case 1, conditioned 1, posedge 1, negedge 0    
-        // $display("Conditioned | Posedge | Negedge | SB Conditioned | SB Posedge | SB Negedge");
-        clk=clk;pin=1;#1000
-        $display("%b | %b | %b | 1 | 1 | 0",  conditioned, rising, falling);
-=======
+
+        // // // SB Indicates should be
+        // // // Test case 1, conditioned 1, posedge 1, negedge 0    
+        // // $display("Conditioned | Posedge | Negedge | SB Conditioned | SB Posedge | SB Negedge");
+        // clk=clk;pin=1;#1000
+        // $display("%b | %b | %b | 1 | 1 | 0",  conditioned, rising, falling);
+
 module inputconditionerDUT
 (
 input begintest,
 output reg  endtest,
 output reg  dutpassed,
->>>>>>> 3b83b8e4fff4fc5230b43fe8fc02f8493da50a0c
 
 input noisysignal,
 output reg conditioned,
