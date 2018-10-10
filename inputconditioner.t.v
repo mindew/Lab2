@@ -4,7 +4,7 @@
 `include "inputconditioner.v"
 module testConditioner();
 
-    reg clk;
+    wire clk;
     reg pin;
     wire conditioned;
     wire rising;
@@ -33,12 +33,17 @@ module testConditioner();
     //     .noisysignal(pin),
     //     .positiveedge(rising),
     //     .negativeedge(falling)
-    // );
+    // )
 
-    // Generate clock (50MHz)
-    initial clk=0;
-    always #10 clk=!clk;    // 50MHz Clock
-    
+
+      // Test harness asserts 'begintest' for 1000 time steps, starting at time 10
+    initial begin
+        begintest=0;
+        #10;
+        begintest=1;
+        #1000;
+    end
+
 
     always @(endtest) begin
         $display("Test passed?: %b", dutpassed);
@@ -71,17 +76,19 @@ initial begin
     positiveedge = 0;
     negativeedge = 0;
     conditioned = 0;
+    clk=0;
 end
 
 
-initial @(begintest) begin
-    $dumpfilie("inputconditioner.vcd");
-    $dumpvars;
+always @(begintest) begin
+    //$dumpfilie("inputconditioner.vcd");
+    //$dumpvars();
     endtest = 0;
     dutpassed = 1;
-    #50
+    #10
 
     conditioned = 1; positiveedge = 1; negativeedge = 0;
+    #5 clk=1; #5 clk=0;   // Generate single clock pulse
     if(( conditioned != 1 ) || (positiveedge != 1) || (negativeedge != 0)) begin
         dutpassed = 0;
         $display("Test case 1, 1, 0 failed and got %b %b %b", conditioned, positiveedge, negativeedge);
@@ -94,8 +101,15 @@ initial @(begintest) begin
 
     #5
     endtest = 1;
-    $finish;
+    //$finish();
     end
     
 
 endmodule
+
+
+    // // Generate clock (50MHz)
+    // initial clk=0;
+    // always #10 clk=!clk;    // 50MHz Clock
+    
+
