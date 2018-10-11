@@ -30,22 +30,14 @@ always #10 clk=!clk;
 initial begin
   $dumpfile("shiftregister.vcd");
   $dumpvars();
-  // Test code
-  parallelLoad = 1;
-  parallelDataIn = 8'b00000000; #50
-  $display("serial out %b", serialDataOut);
-  $display("data out %b", parallelDataOut);
 
   // Test Case 1:
   // Parallel = 10000000, Serial = 1
   // Parallel output = 00000001, seerial output = 0;
   parallelLoad = 1'b0;
   parallelDataIn = 8'b10000000;
-  peripheralClkEdge = 0;
-  serialDataIn = 1;   #50
-  peripheralClkEdge = 1; #10
-  peripheralClkEdge = 0;
-
+  peripheralClkEdge = 1;
+  serialDataIn=1; #20
 
   if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
       $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
