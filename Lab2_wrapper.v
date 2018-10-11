@@ -52,8 +52,8 @@ module lab2_wrapper
     wire serialDataOut;
 
     // Memory for stored inputs (parametric width set to 4 bits)
-    dff #(4) sRes_mem1(.trigger(clk), .enable(btn[0]), .d(sw), .q(parallelDataIn));
-    dff #(4) sRes_mem2(.trigger(clk), .enable(btn[1]), .d(sw), .q(parallelDataIn));
+    dff #(4) sRes_mem1(.trigger(clk), .enable(btn[0]), .d(sw), .q(serialDataIn));
+    dff #(4) sRes_mem2(.trigger(clk), .enable(btn[1]), .d(sw), .q(serialDataIn));
     
 
     // Capture button input to switch which MUX input to LEDs
