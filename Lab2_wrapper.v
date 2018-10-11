@@ -73,6 +73,6 @@ module lab2_wrapper
     assign res0[2] = parallelDataOut[6];
     assign res0[3] = parallelDataOut[7];
 
-    shiftregister shiftregister(.parallelDataOut(parallelDataOut), .serialDataOut(serialDataOut), .clk(clk), .peripheralClkEdge(peripheralClkEdge), .serialDataIn(serialDataIn), .parallelDataIn(parallelDataIn), .parallelLoad(parallelLoad) );
+    shiftregister #(8) shiftregister(.parallelDataOut(parallelDataOut), .serialDataOut(serialDataOut), .clk(clk), .peripheralClkEdge(peripheralClkEdge), .serialDataIn(serialDataIn), .parallelDataIn(parallelDataIn), .parallelLoad(parallelLoad) );
         
 endmodule
