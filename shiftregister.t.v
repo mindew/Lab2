@@ -1,5 +1,5 @@
 `include "shiftregister.v"
-`timescale 1ns/1ps
+//`timescale 1ns/1ps
 // Shift Register test bench
 module testshiftregister();
 
@@ -42,8 +42,8 @@ module testshiftregister();
         .dutpassed(dutpassed)
     );
 
-    initial clk=0;
-    always #10 clk=!clk;
+    // initial clk=0;
+    // always #10 clk=!clk;
 
     // Test harness asserts 'begintest' for 1000 time steps, starting at time 10
     initial begin
@@ -62,7 +62,7 @@ endmodule
 
 module shifttest
 (
-input    wire           clk,                    // FPGA clock
+input reg           clk,                    // FPGA clock
 input                   peripheralClkEdge,      // 1 = you're at clock edge
 input                   parallelLoad,           // 1 = Load shift reg with parallelDataIn
 output  reg[7:0]        parallelDataOut,        // shifted reg data contents
@@ -83,9 +83,17 @@ output  reg             dutpassed               // signal test result
         parallelLoad = 1'b0;
     	parallelDataIn = 8'b00000000;      
         serialDataIn = 1'b0;
+        clk=0;
     end
 
-    always @(posedge clk) begin
+    always @(posedge begintest) begin
+        endtest = 0;
+        dutpassed = 1;
+        #10
+
+
+
+    // always @(posedge clk) begin
         // Test Case 1:
         // Parallel = 10000000, Serial = 1
         // Parallel output = 00000001, seerial output = 0;
@@ -100,5 +108,10 @@ output  reg             dutpassed               // signal test result
         if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
             $display("Test Case 1 Failed");
         end
+
+        #5
+        endtest =1;
+
+
     end
 endmodule 
