@@ -4,12 +4,12 @@
 module testshiftregister();
 
     wire             clk;    
-    reg             peripheralClkEdge;      // 1 = you're at clock edge
-    reg             parallelLoad;           // 1 = Load shift reg with parallelDataIn
+    wire             peripheralClkEdge;      // 1 = you're at clock edge
+    wire             parallelLoad;           // 1 = Load shift reg with parallelDataIn
     wire[7:0]       parallelDataOut;        // shifted reg data contents
     wire            serialDataOut;          // Positive edge synchronized
-    reg[7:0]        parallelDataIn;         // load shift reg in parallel
-    reg             serialDataIn;           // load shift reg in serial
+    wire[7:0]        parallelDataIn;         // load shift reg in parallel
+    wire             serialDataIn;           // load shift reg in serial
 
     reg             begintest;
     wire            endtest;
@@ -62,13 +62,13 @@ endmodule
 
 module shifttest
 (
-input reg           clk,                    // FPGA clock
-input                   peripheralClkEdge,      // 1 = you're at clock edge
-input                   parallelLoad,           // 1 = Load shift reg with parallelDataIn
-output  reg[7:0]        parallelDataOut,        // shifted reg data contents
-output  reg[7:0]        serialDataOut,          // Positive edge synchronized
-input[7:0]              parallelDataIn,         // load shift reg in parallel
-input                   serialDataIn,           // load shift reg in serial
+output reg           clk,                    // FPGA clock
+output reg                   peripheralClkEdge,      // 1 = you're at clock edge
+output reg                   parallelLoad,           // 1 = Load shift reg with parallelDataIn
+input [7:0]        parallelDataOut,        // shifted reg data contents
+input        serialDataOut,          // Positive edge synchronized
+output reg[7:0]              parallelDataIn,         // load shift reg in parallel
+output reg              serialDataIn,           // load shift reg in serial
 
 input                   begintest,              // Triggers start of testing
 output  reg             endtest,                // Raise once test completes
@@ -86,7 +86,7 @@ output  reg             dutpassed               // signal test result
         clk=0;
     end
 
-    always @(posedge begintest) begin
+    always @(begintest) begin
         endtest = 0;
         dutpassed = 1;
         #10
@@ -101,7 +101,7 @@ output  reg             dutpassed               // signal test result
         parallelLoad = 1'b1;
         parallelDataIn = 8'b10000000;
         serialDataIn = 1'b1;
-        #5 Clk = 1;  #5 Clk = 0;    // Generate single clock pulse
+        #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
         
         #100
 
