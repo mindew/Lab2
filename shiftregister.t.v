@@ -46,9 +46,21 @@ initial begin
   peripheralClkEdge = 1; #10
   peripheralClkEdge = 0;
 
+<<<<<<< HEAD
+module shifttest
+(
+output reg              clk,                    // FPGA clock
+output reg              peripheralClkEdge,      // 1 = you're at clock edge
+output reg              parallelLoad,           // 1 = Load shift reg with parallelDataIn
+input [7:0]             parallelDataOut,        // shifted reg data contents
+input                   serialDataOut,          // Positive edge synchronized
+output reg[7:0]         parallelDataIn,         // load shift reg in parallel
+output reg              serialDataIn,           // load shift reg in serial
+=======
   if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
       $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
   end
+>>>>>>> e38c02ff2d4055346a0691a33ac6b2245b12d9be
 
 
   $finish();
@@ -57,4 +69,30 @@ initial begin
 
 end
 
+<<<<<<< HEAD
+
+    // always @(posedge clk) begin
+        // Test Case 1:
+        // Parallel = 10000000, Serial = 1
+        // Parallel output = 00000001, seerial output = 0;
+        peripheralClkEdge = 1'b1;
+        parallelLoad = 1'b0;
+        parallelDataIn = 8'b10000000;
+        serialDataIn = 1'b1;
+        #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
+        
+        #100
+
+        if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
+            $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
+        end
+
+        #5
+        endtest =1;
+
+
+    end
+endmodule 
+=======
 endmodule
+>>>>>>> e38c02ff2d4055346a0691a33ac6b2245b12d9be
