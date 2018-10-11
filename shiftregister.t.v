@@ -3,7 +3,7 @@
 // Shift Register test bench
 module testshiftregister();
 
-    reg             clk;    
+    wire             clk;    
     reg             peripheralClkEdge;      // 1 = you're at clock edge
     reg             parallelLoad;           // 1 = Load shift reg with parallelDataIn
     wire[7:0]       parallelDataOut;        // shifted reg data contents

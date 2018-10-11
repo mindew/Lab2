@@ -26,14 +26,14 @@ module testConditioner();
         .negativeedge(falling)
     );
 
-    // testConditionerTestBench tester
-    // (
+    inputconditionerDUT tester
+    (
 
-    //     .clk(clk),
-    //     .noisysignal(pin),
-    //     .positiveedge(rising),
-    //     .negativeedge(falling)
-    // )
+        .clk(clk),
+        .noisysignal(pin),
+        .positiveedge(rising),
+        .negativeedge(falling)
+    );
 
 
       // Test harness asserts 'begintest' for 1000 time steps, starting at time 10
