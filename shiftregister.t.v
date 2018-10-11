@@ -62,12 +62,12 @@ endmodule
 
 module shifttest
 (
-output reg           clk,                    // FPGA clock
-output reg                   peripheralClkEdge,      // 1 = you're at clock edge
-output reg                   parallelLoad,           // 1 = Load shift reg with parallelDataIn
-input [7:0]        parallelDataOut,        // shifted reg data contents
-input        serialDataOut,          // Positive edge synchronized
-output reg[7:0]              parallelDataIn,         // load shift reg in parallel
+output reg              clk,                    // FPGA clock
+output reg              peripheralClkEdge,      // 1 = you're at clock edge
+output reg              parallelLoad,           // 1 = Load shift reg with parallelDataIn
+input [7:0]             parallelDataOut,        // shifted reg data contents
+input                   serialDataOut,          // Positive edge synchronized
+output reg[7:0]         parallelDataIn,         // load shift reg in parallel
 output reg              serialDataIn,           // load shift reg in serial
 
 input                   begintest,              // Triggers start of testing
@@ -98,7 +98,7 @@ output  reg             dutpassed               // signal test result
         // Parallel = 10000000, Serial = 1
         // Parallel output = 00000001, seerial output = 0;
         peripheralClkEdge = 1'b1;
-        parallelLoad = 1'b1;
+        parallelLoad = 1'b0;
         parallelDataIn = 8'b10000000;
         serialDataIn = 1'b1;
         #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
@@ -106,7 +106,7 @@ output  reg             dutpassed               // signal test result
         #100
 
         if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
-            $display("Test Case 1 Failed");
+            $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
         end
 
         #5
