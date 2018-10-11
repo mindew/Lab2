@@ -102,11 +102,10 @@ output  reg             dutpassed               // signal test result
         parallelDataIn = 8'b10000000;
         serialDataIn = 1'b1;
         #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
-        
-        #100
+    
 
         if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
-            $display("Test Case 1 Failed");
+            $display("%d, %d, %d", clk, parallelDataIn, serialDataOut);
         end
 
         #5
