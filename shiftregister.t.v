@@ -3,7 +3,7 @@
 // Shift Register test bench
 module testshiftregister();
 
-    wire             clk;    
+    wire             clk;
     wire             peripheralClkEdge;      // 1 = you're at clock edge
     wire             parallelLoad;           // 1 = Load shift reg with parallelDataIn
     wire[7:0]       parallelDataOut;        // shifted reg data contents
@@ -50,7 +50,7 @@ module testshiftregister();
         begintest = 0;
         #10;
         begintest = 1;
-        #1000;  
+        #1000;
     end
 
     // Display test results ('dutpassed' signal) once 'endtest' goes high
@@ -81,7 +81,7 @@ output  reg             dutpassed               // signal test result
     initial begin
         peripheralClkEdge = 1'b0;
         parallelLoad = 1'b0;
-    	parallelDataIn = 8'b00000000;      
+    	parallelDataIn = 8'b00000000;
         serialDataIn = 1'b0;
         clk=0;
     end
@@ -97,16 +97,16 @@ output  reg             dutpassed               // signal test result
         // Test Case 1:
         // Parallel = 10000000, Serial = 1
         // Parallel output = 00000001, seerial output = 0;
-        peripheralClkEdge = 1'b1;
+        peripheralClkEdge = 1'b0;
         parallelLoad = 1'b1;
-        parallelDataIn = 8'b10000000;
+        parallelDataIn = 8'b10000000; #50
         serialDataIn = 1'b1;
         #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
-        
-        #100
+
+        #500
 
         if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
-            $display("Test Case 1 Failed");
+            $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
         end
 
         #5
@@ -114,4 +114,4 @@ output  reg             dutpassed               // signal test result
 
 
     end
-endmodule 
+endmodule
