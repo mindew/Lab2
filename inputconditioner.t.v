@@ -78,11 +78,11 @@ initial begin
     conditioned = 0;
     clk=0;
 end
-
-
-always @(begintest) begin
     //$dumpfilie("inputconditioner.vcd");
     //$dumpvars();
+
+always @(begintest) begin
+
     endtest = 0;
     dutpassed = 1;
     #10
