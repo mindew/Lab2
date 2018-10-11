@@ -14,11 +14,15 @@ input               peripheralClkEdge,  // Edge indicator
 input               parallelLoad,       // 1 = Load shift reg with parallelDataIn
 input  [width-1:0]  parallelDataIn,     // Load shift reg in parallel
 input               serialDataIn,       // Load shift reg serially
-output reg [width-1:0]  parallelDataOut,    // Shift reg data contents
-output reg             serialDataOut       // Positive edge synchronized
+output [width-1:0]  parallelDataOut,    // Shift reg data contents
+output              serialDataOut       // Positive edge synchronized
 );
 
     reg [width-1:0]      shiftregistermem;
+    assign parallelDataOut = shiftregistermem;
+    // store the msb in serialDataOut
+    assign serialDataOut = shiftregistermem[width-1];
+
     always @(posedge clk) begin
 
       if (parallelLoad) begin
@@ -29,10 +33,6 @@ output reg             serialDataOut       // Positive edge synchronized
         // advance the shift register one position, putting serialData in lsb
         shiftregistermem <= {shiftregistermem[width-2:0], serialDataIn};
       end
-
-      // store the msb in serialDataOut
-      parallelDataOut <= shiftregistermem;
-      serialDataOut <= parallelDataOut[width-1];
 
     end
 
