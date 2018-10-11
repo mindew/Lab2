@@ -46,21 +46,11 @@ initial begin
   peripheralClkEdge = 1; #10
   peripheralClkEdge = 0;
 
+  if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
+      $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
+  end
 
-    // always @(posedge clk) begin
-        // Test Case 1:
-        // Parallel = 10000000, Serial = 1
-        // Parallel output = 00000001, seerial output = 0;
-        peripheralClkEdge = 1'b0;
-        parallelLoad = 1'b1;
-        parallelDataIn = 8'b10000000; #50
-        serialDataIn = 1'b1;
-        #5 clk = 1;  #5 clk = 0;    // Generate single clock pulse
-    
 
-        if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
-            $display("%d, %d, %d", clk, parallelDataIn, serialDataOut);
-        end
   $finish();
 
 
