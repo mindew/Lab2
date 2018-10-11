@@ -32,15 +32,50 @@ initial begin
   $dumpvars();
 
   // Test Case 1:
+  // test serial input
   // Parallel = 10000000, Serial = 1
   // Parallel output = 00000001, seerial output = 0;
+  parallelLoad = 1'b1;
+  parallelDataIn = 8'b10000000; #20
   parallelLoad = 1'b0;
-  parallelDataIn = 8'b10000000;
   peripheralClkEdge = 1;
   serialDataIn=1; #20
 
-  if((parallelDataOut !== 00000001) || (serialDataOut !== 0)) begin
+  if((parallelDataOut !== 8'b00000001) || (serialDataOut !== 0)) begin
       $display("Test Case 1 Failed %b %b", parallelDataOut, serialDataOut);
+  end
+
+  // Test Case 2:
+  // test parallel input
+  // Parallel = 10101011
+  // Parallel output = 10101011, seerial output = 1;
+  parallelLoad = 1'b1;
+  parallelDataIn = 8'b10101011; #20
+
+  if((parallelDataOut !== 8'b10101011) || (serialDataOut !== 1)) begin
+      $display("Test Case 2 Failed %b %b", parallelDataOut, serialDataOut);
+  end
+
+  // Test Case 3:
+  // load multiple serial values in a row
+  // Parallel = 10000000, Serial = 1
+  // Parallel output = 00000001, seerial output = 0;
+  parallelLoad = 1'b1;
+  parallelDataIn = 8'b10000000; #20
+  parallelLoad = 1'b0;
+  peripheralClkEdge = 1;
+  serialDataIn=1; #20
+  peripheralClkEdge = 1;
+  serialDataIn=0; #20
+  peripheralClkEdge = 1;
+  serialDataIn=0; #20
+  peripheralClkEdge = 1;
+  serialDataIn=1; #20
+  peripheralClkEdge = 1;
+  serialDataIn=1; #20
+
+  if((parallelDataOut !== 8'b00010011) || (serialDataOut !== 0)) begin
+      $display("Test Case 3 Failed %b %b", parallelDataOut, serialDataOut);
   end
 
 
