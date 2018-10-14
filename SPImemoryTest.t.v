@@ -114,35 +114,35 @@ module SPImemoryTest ();
 
 		// Check the data value in the data memory
 		if( dut.dm.address != 8'b0000011) begin // Change variable address value
-			$display("Test 4 failed. Is %b should be 8'b00000011", dut.fsm1.address);
+			$display("Test 4 failed. Is %b should be 8'b00000011", dut.dm.address);
 		end
 
 
 		// Test 5
 		// Data: 0101010
-		sclk = 0; mosi_pin = 1; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 1; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 0; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 0; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 1; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 1; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 0; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 0; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 1; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 1; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 0; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 0; #1000
+		sclk_pin = 1; #1000
 
-		sclk = 0; mosi_pin = 1; #1000
-		sclk = 1; #1000
+		sclk_pin = 0; mosi_pin = 1; #1000
+		sclk_pin = 1; #1000
 
-		if (dut.datamemory.addressValue[0] != 8'b0101010) begin
-			$display("Test 5 failed. Is %b should be 8'b0101010", dut.datamemory.addressValue[0]);
+		if (dut.dm.address[0] != 8'b0101010) begin
+			$display("Test 5 failed. Is %b should be 8'b0101010", dut.dm.address[0]);
 		end
 
 
