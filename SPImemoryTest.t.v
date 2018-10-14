@@ -1,4 +1,4 @@
-
+`include "spimemory.v"
 // Reference: State values
 
 // `define START  3'd0 = 000
@@ -45,7 +45,7 @@ module SPImemoryTest ();
 		// For each test need to set the serial clock: sclk = 0; #1000 sclk = 1; #1000
 
 		// set cs pin, sclk, check the state of the fsm or the memory
-s
+
 		// Want to test the ability of the test finiate state machine to handle each input correctly.
 
 		// 1) When the machine is started is the start bit correct? -> When cs is first low the 7 bits should be empty and the 8th bit is either read or write
@@ -60,12 +60,12 @@ s
 		cs_pin = 0;
 		mosi_pin=0;
 		sclk_pin = 0; #1000
-		sclk_pin = 0; 
+		sclk_pin = 0;
 
-		if( dut.fsm.currentState != 3'b000) begin// NEED TO CHANGE TO ACTUAL VARIABE NAMES
-			$display("Test 1 failed. Is %b should be 7'b0000000", dut.fsm.currentState);
+		if( dut.fsm1.state != 3'b000) begin// NEED TO CHANGE TO ACTUAL VARIABE NAMES
+			$display("Test 1 failed. Is %b should be 7'b0000000", dut.fsm1.state);
 		end
-		
+
 
 		// We start with CS high
 		// Test 2
@@ -76,8 +76,8 @@ s
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
-		if( dut.fsm.currentState != 3'b001) begin
-			$display("Test 2 failed. Is %b should be 7'b0000001", dut.fsm.currentState);
+		if( dut.fsm1.state != 3'b001) begin
+			$display("Test 2 failed. Is %b should be 7'b0000001", dut.fsm1.state);
 		end
 
 		// Test 3
@@ -88,8 +88,8 @@ s
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
-		if( dut.fsm.currentState != 7'b0000010) begin
-			$display("Test 3 failed. Is %b should be 7'b0000010", dut.fsm.currentState);
+		if( dut.fsm1.state != 7'b0000010) begin
+			$display("Test 3 failed. Is %b should be 7'b0000010", dut.fsm1.state);
 		end
 
 
@@ -108,13 +108,13 @@ s
 
 		// Do I have to do this all 7 times, or can I leave some blank?
 		// check the writing state
-    	if( dut.fsm.currentState != 3'b100) begin
-			$display("Test 4 failed. Is %b should be 7'b0000001", dut.fsm.currentState);
+    	if( dut.fsm1.state != 3'b100) begin
+			$display("Test 4 failed. Is %b should be 7'b0000001", dut.fsm1.state);
 		end
 
 		// Check the data value in the data memory
-		if( dut.datamemory.addressValue != 8'b0000011) begin // Change variable address value
-			$display("Test 4 failed. Is %b should be 8'b00000011", dut.fsm.currentState);
+		if( dut.dm.address != 8'b0000011) begin // Change variable address value
+			$display("Test 4 failed. Is %b should be 8'b00000011", dut.fsm1.address);
 		end
 
 
