@@ -1,9 +1,6 @@
 
 
 // AddressLatch,
-
-
-//TODO: Is this the same as a D Flip Flop???
 module addressLatch (
 	input clk,    // Clock
 	input clk_en, // Clock Enable
@@ -14,8 +11,7 @@ module addressLatch (
 
 	always @(posedge clk ) begin :
 		if(clk_en) begin
-			q <= d;
+			q[7:0] <= d[7:0];
 		end
 	end
-
 endmodule
