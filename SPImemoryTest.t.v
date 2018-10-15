@@ -57,13 +57,12 @@ module SPImemoryTest ();
 
 		// Test 1 (USe this syntax:  dut.dm.memory)
 
-		cs_pin = 0;
+		cs_pin = 1;
 		mosi_pin=0;
 		sclk_pin = 0; #1000
-		sclk_pin = 0;
-
+		sclk_pin = 1; #1000
 		if( dut.fsm1.state != 3'b000) begin// NEED TO CHANGE TO ACTUAL VARIABE NAMES
-			$display("Test 1 failed. Is %b should be 7'b0000000", dut.fsm1.state);
+			$display("Test 1 failed. Is %b should be 3'b000", dut.fsm1.state);
 		end
 
 
@@ -71,25 +70,12 @@ module SPImemoryTest ();
 		// Test 2
 		// Data: 0000000 and in start state
 
-		cs_pin = 1;
-		mosi_pin = 0;
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-
-		if( dut.fsm1.state != 3'b001) begin
-			$display("Test 2 failed. Is %b should be 7'b0000001", dut.fsm1.state);
-		end
-
-		// Test 3
-		// Data: 0000000 and in get data state
-
 		cs_pin = 0;
 		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-
-		if( dut.fsm1.state != 7'b0000010) begin
-			$display("Test 3 failed. Is %b should be 7'b0000010", dut.fsm1.state);
+		if( dut.fsm1.state != 3'b001) begin
+			$display("Test 2 failed. Is %b should be 3'b001", dut.fsm1.state);
 		end
 
 
@@ -106,43 +92,45 @@ module SPImemoryTest ();
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
 		// Do I have to do this all 7 times, or can I leave some blank?
 		// check the writing state
     	if( dut.fsm1.state != 3'b100) begin
-			$display("Test 4 failed. Is %b should be 7'b0000001", dut.fsm1.state);
+			$display("Test 4 failed. Is %b should be 3'100", dut.fsm1.state);
 		end
+
 
 		// Check the data value in the data memory
-		if( dut.dm.address != 8'b0000011) begin // Change variable address value
-			$display("Test 4 failed. Is %b should be 8'b00000011", dut.dm.address);
-		end
-
-
-		// Test 5
-		// Data: 0101010
-		sclk_pin = 0; mosi_pin = 1; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 0; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 1; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 0; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 1; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 0; #1000
-		sclk_pin = 1; #1000
-
-		sclk_pin = 0; mosi_pin = 1; #1000
-		sclk_pin = 1; #1000
-
-		if (dut.dm.address[0] != 8'b0101010) begin
-			$display("Test 5 failed. Is %b should be 8'b0101010", dut.dm.address[0]);
+		if( dut.dm.address != 7'b1000000) begin // Change variable address value
+			$display("Test 4 failed. Is %b should be 7'b1000000", dut.dm.address);
 		end
 
 

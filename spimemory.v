@@ -46,7 +46,7 @@ module spimemory
 
   datamemory dm(clk, datamemoryout, address[6:0], dm_we, parallelDataOut);
 
-  shiftregister clkSerialIn(clk, posedge2, sr_we, datamemoryout, conditioned1, parallelDataOut, serialDataOut);
+  shiftregister sr1(clk, posedge2, sr_we, datamemoryout, conditioned1, parallelDataOut, serialDataOut);
 
 /*
 	always @(posedge sclk_pin) begin

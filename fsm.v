@@ -20,7 +20,7 @@ module fsm
   reg [2:0] count;
 
   always @(posedge sclk) begin
-    if (state == 3'dx) begin
+    if (state === 3'dx) begin
       state <= `START;
       count <= 3'd0;
     end
@@ -36,6 +36,10 @@ module fsm
           state <= `START;
       end
       `GET_BITS: begin
+        sr_we <= 0;
+        addr_we <= 1;
+        dm_we <= 0;
+        miso_bufe <= 0;
         if (count < 7)
           count <= count + 1;
         else if (count == 7) begin
