@@ -2,114 +2,109 @@
 // Input Conditioner test bench
 //------------------------------------------------------------------------
 `include "inputconditioner.v"
+// `timescale 1ns/1ps
 module testConditioner();
 
-    wire clk;
-    reg pin;
+    reg clk;
+    reg noisysignal;
     wire conditioned;
     wire rising;
     wire falling;
     
-    reg begintest;
-    wire endtest;
-    wire dutpassed;
     
-    inputconditionerDUT dut
+    inputconditioner inputconditionerDUT
     (
-        .begintest(begintest),
-        .endtest(endtest),
-        .dutpassed(dutpassed),
         .clk(clk),
-        .noisysignal(pin),
+        .noisysignal (noisysignal),
         .conditioned(conditioned),
-        .positiveedge(rising),
-        .negativeedge(falling)
-    );
-
-    inputconditionerDUT tester
-    (
-
-        .clk(clk),
-        .noisysignal(pin),
         .positiveedge(rising),
         .negativeedge(falling)
     );
 
 
       // Test harness asserts 'begintest' for 1000 time steps, starting at time 10
+
+
     initial begin
-        begintest=0;
-        #10;
-        begintest=1;
-        #1000;
+        $dumpfile("inputconditioner.vcd");
+        $dumpvars();
+        noisysignal = 0;
+        clk=0;
     end
 
+    // Generate clock (50MHz)
+    initial clk = 0;
+    always #10 clk = !clk;    // 50MHz Clock
 
-    always @(endtest) begin
-        $display("Test passed?: %b", dutpassed);
+
+    initial begin
+
+
+        noisysignal = 0;#5
+        
+        noisysignal = 1;#20
+
+        if(( conditioned != 1 )) begin
+            $display("Conditioned Test case 1 Failed");
+        end
+
+
+        
+        noisysignal = 0;#20
+
+        if(( conditioned != 0 )) begin
+            $display("Conditioned Test case 2 Failed");
+        end
+
+
+
+        noisysignal = 1; #5
+
+        if(( inputconditionerDUT.synchronizer0 == 1 )) begin
+            $display("Sync Test case 3 Failed");
+        end
+
+        #15
+
+        if(( inputconditionerDUT.synchronizer1 == 1 )) begin
+            $display("Sync Test case 4 Failed");
+        end
+
+
+        noisysignal = 0; #300
+        noisysignal = 1; #5
+        noisysignal = 0; #5
+        noisysignal = 1; #5
+        noisysignal = 0; #5
+        noisysignal = 1; #250
+
+        // Expect the conditioned output to be high when the pin input has stabilized.
+        if (conditioned != 1) begin
+            $display("Debouncing to Rest High Test Case 5 failed.");
+        end
+
+
+        #5
+        $finish();
     end
+        
 
+        always @(posedge conditioned) begin
+            #5;
+            if (rising != 1 && $time > 100) begin
+                $display("Positive Edge Test Case 6 failed");
+            end
+        end
+        
+
+        always @(negedge conditioned) begin
+            #5;
+            if (falling != 1 && $time > 100) begin
+                $display("Negative Edge Test Case 7 failed");
+            end
+        end
+
+        
+
+        
 endmodule
-
-
-
-        // // // SB Indicates should be
-        // // // Test case 1, conditioned 1, posedge 1, negedge 0    
-        // // $display("Conditioned | Posedge | Negedge | SB Conditioned | SB Posedge | SB Negedge");
-        // clk=clk;pin=1;#1000
-        // $display("%b | %b | %b | 1 | 1 | 0",  conditioned, rising, falling);
-
-module inputconditionerDUT
-(
-input begintest,
-output reg  endtest,
-output reg  dutpassed,
-
-input noisysignal,
-output reg conditioned,
-output reg positiveedge,
-output reg negativeedge,
-output reg clk
-);
-
-initial begin
-    positiveedge = 0;
-    negativeedge = 0;
-    conditioned = 0;
-    clk=0;
-end
-    //$dumpfilie("inputconditioner.vcd");
-    //$dumpvars();
-
-always @(begintest) begin
-
-    endtest = 0;
-    dutpassed = 1;
-    #10
-
-    conditioned = 1; positiveedge = 1; negativeedge = 0;
-    #5 clk=1; #5 clk=0;   // Generate single clock pulse
-    if(( conditioned != 1 ) || (positiveedge != 1) || (negativeedge != 0)) begin
-        dutpassed = 0;
-        $display("Test case 1, 1, 0 failed and got %b %b %b", conditioned, positiveedge, negativeedge);
-    end
-        // $dumpfile("inputconditioner.vcd");
-        // $dumpvars();       
-
-        // $finish();
-
-
-    #5
-    endtest = 1;
-    //$finish();
-    end
-    
-
-endmodule
-
-
-    // // Generate clock (50MHz)
-    // initial clk=0;
-    // always #10 clk=!clk;    // 50MHz Clock
-    
-
