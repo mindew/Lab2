@@ -80,7 +80,7 @@ module SPImemoryTest ();
 
 
 		// Test 4
-		// Data: 0000011 and in write state
+		// Data: 11000000 and in write state
 
 		cs_pin = 0;
 		mosi_pin = 1;
@@ -124,7 +124,7 @@ module SPImemoryTest ();
 		// Do I have to do this all 7 times, or can I leave some blank?
 		// check the writing state
     	if( dut.fsm1.state != 3'b100) begin
-			$display("Test 4 failed. Is %b should be 3'100", dut.fsm1.state);
+			$display("Test 3 failed. Is %b should be 3'100", dut.fsm1.state);
 		end
 
 
@@ -133,8 +133,74 @@ module SPImemoryTest ();
 			$display("Test 4 failed. Is %b should be 7'b1000000", dut.dm.address);
 		end
 
+		// check if parallelout in write mode is as same as the data memory
+		// Data: 11000000
+		// Write State --> Data memory == 11000000
+		if(dut.sr1.parallelDataOut != 8'b11000000) begin
+			$display("Test 5 failed. Is %b should be 8'11000000", dut.sr1.parallelDataOut);
+		end
 
+		cs_pin = 0;
+		mosi_pin = 1;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
 
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 1;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 1;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 1;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		cs_pin = 0;
+		mosi_pin = 1;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		// check if read state is functioning
+		// DataIn : 10100111 expected parallel data out: 10100111
+		if(dut.sr1.parallelDataOut != 8'b10100111) begin
+			$display("Test 6 failed. Is %b should be 8'10100111", dut.sr1.parallelDataOut);
+		end
+
+		// gives two clock periods
+		// MISO should be equal to data input
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		// if(dut.sr1.miso_pin != 8'b10100111) begin
+		// 	$display("Test 7 failed. Is %b should be 8'1010011", dut.srl.miso_pin);
+		// end
+		// if(dut.fsm.miso_bufe != 8'b10100111) begin
+		// 	$display("Test 7 failed. Is %b should be 8'10100111", dut.fsm.miso_bufe);
+		// end
+		// Read State --> Give it 10100111 000< Parallel Data out should be equal == 1010011
+		// MISO --> After 2 clock periods, miso should be equal to 1010011
 	  $finish();
 
 
