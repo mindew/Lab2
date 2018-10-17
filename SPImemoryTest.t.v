@@ -113,12 +113,13 @@ module SPImemoryTest ();
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 0;
+		mosi_pin = 1;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
-		cs_pin = 0;
 		mosi_pin = 0;
+
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
@@ -140,6 +141,9 @@ module SPImemoryTest ();
 		if(dut.sr1.parallelDataOut != 8'b11000000) begin
 			$display("Test 5 failed. Is %b should be 8'11000000", dut.sr1.parallelDataOut);
 		end
+
+		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
+
 
 		// now start writing a value of 00110000 to data memory
 		mosi_pin = 0;
@@ -166,6 +170,8 @@ module SPImemoryTest ();
 		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
+
 		$display("memory is %b", dut.dm.memory[dut.dm.address]);
 		$display("State is %b", dut.fsm1.state);
 		sclk_pin = 0; #1000
@@ -210,7 +216,7 @@ module SPImemoryTest ();
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 0;
+		mosi_pin = 1;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
@@ -220,8 +226,9 @@ module SPImemoryTest ();
 
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
+
+		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
+
 
 		$display("memory is %b", dut.dm.memory[dut.dm.address]);
 		$display("hiya State is %b", dut.fsm1.state);

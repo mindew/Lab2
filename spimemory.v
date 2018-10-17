@@ -30,13 +30,13 @@ module spimemory
   inputconditioner ic2(clk, sclk_pin, conditioned2, posedge2, negedge2);
   inputconditioner ic3(clk, cs_pin, conditioned3, posedge3, negedge3);
 
-  fsm fsm1(posedge2, conditioned3, parallelDataOut[0], miso_bufe, dm_we, addr_we, sr_we);
-
   addressLatch al(clk, addr_we, parallelDataOut, address);
 
   datamemory dm(clk, datamemoryout, address[7:1], dm_we, parallelDataOut);
 
   shiftregister sr1(clk, posedge2, sr_we, datamemoryout, conditioned1, parallelDataOut, serialDataOut);
+
+  fsm fsm1(posedge2, conditioned3, parallelDataOut[0], miso_bufe, dm_we, addr_we, sr_we);
 
   dff dfq(clk, negedge2,serialDataOut,q);
 
