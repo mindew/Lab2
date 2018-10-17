@@ -3,7 +3,8 @@
 `include "fsm.v"
 `include "datamemory.v"
 `include "addressLatch.v"
-
+`include "dff.v"
+`include "tri_buf.v"
 //------------------------------------------------------------------------
 // SPI Memory
 //------------------------------------------------------------------------
@@ -23,6 +24,7 @@ module spimemory
   wire conditioned3, posedge3, negedge3;
   wire[7:0] parallelDataOut, datamemoryout, address;
   wire serialDataOut, miso_bufe, dm_we, addr_we, sr_we;
+  wire q;
 
   inputconditioner ic1(clk, mosi_pin, conditioned1, posedge1, negedge1);
   inputconditioner ic2(clk, sclk_pin, conditioned2, posedge2, negedge2);
@@ -36,7 +38,9 @@ module spimemory
 
   shiftregister sr1(clk, posedge2, sr_we, datamemoryout, conditioned1, parallelDataOut, serialDataOut);
 
+  dff dfq(clk, negedge2,serialDataOut,q);
 
+  tri_buf buffer(q,miso_pin,miso_bufe);
 
 
 endmodule
