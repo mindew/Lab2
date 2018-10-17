@@ -42,20 +42,7 @@ module SPImemoryTest ();
 	  $dumpvars();
 
 
-		// For each test need to set the serial clock: sclk = 0; #1000 sclk = 1; #1000
-
-		// set cs pin, sclk, check the state of the fsm or the memory
-
-		// Want to test the ability of the test finiate state machine to handle each input correctly.
-
-		// 1) When the machine is started is the start bit correct? -> When cs is first low the 7 bits should be empty and the 8th bit is either read or write
-		// 2) When the machine is in starte state with the cs high -> the value in the state machine should be 0000001
-		// 3) When the machine is in the getting bits state, the value should be 00000010
-		// 4) Write 11111 to the machine expect the address to be 11111
-		// 5) Write 010101 to the mahcine expect the data memory to have 010101 in it
-
-
-		// Test 1 (USe this syntax:  dut.dm.memory)
+		// Test 1, confirm we are in START state
 
 		cs_pin = 1;
 		mosi_pin=0;
@@ -68,7 +55,7 @@ module SPImemoryTest ();
 
 		// We start with CS high
 		// Test 2
-		// Data: 0000000 and in start state
+		// Check that we have moved to the GET_BITS state
 
 		cs_pin = 0;
 		mosi_pin = 0;
@@ -80,7 +67,7 @@ module SPImemoryTest ();
 
 
 		// Test 4
-		// Data: 11000000 and in write state
+		// Data: 11000000 as the address
 
 		cs_pin = 0;
 		mosi_pin = 1;
@@ -113,13 +100,12 @@ module SPImemoryTest ();
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 1;
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
+		// go to the WRITE state
 		mosi_pin = 0;
-
-
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
@@ -130,19 +116,15 @@ module SPImemoryTest ();
 		end
 
 
-		// Check the data value in the data memory
+		// Check the address in the data memory has been set from these bits
 		if( dut.dm.address != 7'b1100000) begin // Change variable address value
 			$display("Test 4 failed. Is %b should be 7'b1100000", dut.dm.address);
 		end
 
-		// check if parallelout in write mode is as same as the data memory
-		// Data: 11000000
-		// Write State --> Data memory == 11000000
+		// check if parallelout in write mode is as same as the address value
 		if(dut.sr1.parallelDataOut != 8'b11000000) begin
 			$display("Test 5 failed. Is %b should be 8'11000000", dut.sr1.parallelDataOut);
 		end
-
-		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
 
 
 		// now start writing a value of 00110000 to data memory
@@ -170,10 +152,17 @@ module SPImemoryTest ();
 		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
 
-		$display("memory is %b", dut.dm.memory[dut.dm.address]);
-		$display("State is %b", dut.fsm1.state);
+		// confirm that 00110000 has been written to the data memory at the specified address
+		if(dut.dm.memory[dut.dm.address] == 00110000)begin
+			$display("Test 5b failed. Is %b, should be 8'00110000", dut.dm.memory[dut.dm.address]);
+		end
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
@@ -227,93 +216,11 @@ module SPImemoryTest ();
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
-		$display("memory is %b and address is %b", dut.dm.memory[dut.dm.address], dut.dm.address);
-
-
-		$display("memory is %b", dut.dm.memory[dut.dm.address]);
-		$display("hiya State is %b", dut.fsm1.state);
-		$display("hiya State is %b", dut.fsm1.shift_register_output);
-
-		// check if read state is functioning
-		// DataIn : 10100111 expected parallel data out: 10100111
-		if(dut.sr1.parallelDataOut != 8'b10100111) begin
-			$display("Test 6 failed. Is %b should be 8'10100111", dut.sr1.parallelDataOut);
+		// check if we are in the read state
+		if(dut.fsm1.state != 8'b010) begin
+			$display("Test 6 failed. Is %b should be 8'010", dut.fsm1.state);
 		end
 
-		// if(dut.miso_pin != 8'b10100111) begin
-		// 	$display("Test 7 failed. Is %b should be 8'1010011 %b", dut.miso_pin,dut.fsm1.state);
-		// end
-
-
-		// gives two clock periods
-		// MISO should be equal to data input
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("hi %b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-		$display("%b %b %b %b %b", dut.miso_pin, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
-		$display("%b", dut.al.q);
-		$display("%b", dut.dm.address);
-		$display("%b", dut.dm.dataIn);
-		$display("%b", dut.dm.dataOut);
-		$display("%b", dut.dm.writeEnable);
-
-
-
-
-		sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-		// sclk_pin = 0; #1000
-		// sclk_pin = 1; #1000
-
-		$display("%b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin);
-
-		if(dut.miso_pin != 1'b1) begin
-			$display("Test 7 failed. Is %b should be 1'b1 %b", dut.miso_pin,dut.fsm1.state);
-		end
-
-		// Read State --> Give it 10100111 000< Parallel Data out should be equal == 1010011
-		// MISO --> After 2 clock periods, miso should be equal to 1010011
 	  $finish();
 
 
