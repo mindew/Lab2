@@ -34,7 +34,7 @@ module spimemory
 
   addressLatch al(clk, addr_we, parallelDataOut, address);
 
-  datamemory dm(clk, datamemoryout, address[6:0], dm_we, parallelDataOut);
+  datamemory dm(clk, datamemoryout, address[7:1], dm_we, parallelDataOut);
 
   shiftregister sr1(clk, posedge2, sr_we, datamemoryout, conditioned1, parallelDataOut, serialDataOut);
 

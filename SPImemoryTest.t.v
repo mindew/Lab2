@@ -61,7 +61,7 @@ module SPImemoryTest ();
 		mosi_pin=0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		if( dut.fsm1.state != 3'b000) begin// NEED TO CHANGE TO ACTUAL VARIABE NAMES
+		if( dut.fsm1.state != 3'b000) begin
 			$display("Test 1 failed. Is %b should be 3'b000", dut.fsm1.state);
 		end
 
@@ -121,16 +121,17 @@ module SPImemoryTest ();
 		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		// Do I have to do this all 7 times, or can I leave some blank?
-		// check the writing state
+
+
+		// check that we are now in the WRITE state
     	if( dut.fsm1.state != 3'b100) begin
 			$display("Test 3 failed. Is %b should be 3'100", dut.fsm1.state);
 		end
 
 
 		// Check the data value in the data memory
-		if( dut.dm.address != 7'b1000000) begin // Change variable address value
-			$display("Test 4 failed. Is %b should be 7'b1000000", dut.dm.address);
+		if( dut.dm.address != 7'b1100000) begin // Change variable address value
+			$display("Test 4 failed. Is %b should be 7'b1100000", dut.dm.address);
 		end
 
 		// check if parallelout in write mode is as same as the data memory
@@ -140,44 +141,51 @@ module SPImemoryTest ();
 			$display("Test 5 failed. Is %b should be 8'11000000", dut.sr1.parallelDataOut);
 		end
 
+		// now start writing a value of 00110000 to data memory
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 1;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 1;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		$display("%b", dut.fsm1.state);
+		$display("memory is %b", dut.dm.memory[dut.dm.address]);
+		$display("State is %b", dut.fsm1.state);
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
 
-
-
+		// reset fsm back to START state, then set chip select to low to start GET_BITS
 		cs_pin = 1;
-		#1000
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		cs_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		// start second iteration of GET_BITS, put in same address to now read the value stored there
 		mosi_pin = 1;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 0;
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000		
-
-		cs_pin = 0;
 		mosi_pin = 1;
-		sclk_pin = 0; #1000
-		sclk_pin = 1; #1000
-
-		cs_pin = 0;
-		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
@@ -187,21 +195,37 @@ module SPImemoryTest ();
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 1;
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 1;
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
 		cs_pin = 0;
-		mosi_pin = 1;
+		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
-		$display("%b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin);
+		cs_pin = 0;
+		mosi_pin = 0;
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		// last bit is a 1 to tell it to go to READ state
+		cs_pin = 0;
+		mosi_pin = 1;
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
+		$display("memory is %b", dut.dm.memory[dut.dm.address]);
+		$display("hiya State is %b", dut.fsm1.state);
+		$display("hiya State is %b", dut.fsm1.shift_register_output);
 
 		// check if read state is functioning
 		// DataIn : 10100111 expected parallel data out: 10100111
@@ -212,18 +236,54 @@ module SPImemoryTest ();
 		// if(dut.miso_pin != 8'b10100111) begin
 		// 	$display("Test 7 failed. Is %b should be 8'1010011 %b", dut.miso_pin,dut.fsm1.state);
 		// end
-		
+
 
 		// gives two clock periods
 		// MISO should be equal to data input
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		$display("hi %b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		$display("%b %b %b %b %b", dut.miso_pin, dut.miso_bufe, dut.fsm1.state, dut.miso_pin, dut.sr1.parallelDataOut);
+		$display("%b", dut.al.q);
+		$display("%b", dut.dm.address);
+		$display("%b", dut.dm.dataIn);
+		$display("%b", dut.dm.dataOut);
+		$display("%b", dut.dm.writeEnable);
+
+
+
+
 		sclk_pin = 0; #1000
 		// sclk_pin = 1; #1000
 		// sclk_pin = 0; #1000
@@ -238,13 +298,13 @@ module SPImemoryTest ();
 		// sclk_pin = 1; #1000
 		// sclk_pin = 0; #1000
 		// sclk_pin = 1; #1000
-	
+
 		$display("%b %b %b %b", dut.sr1.serialDataOut, dut.miso_bufe, dut.fsm1.state, dut.miso_pin);
 
 		if(dut.miso_pin != 1'b1) begin
 			$display("Test 7 failed. Is %b should be 1'b1 %b", dut.miso_pin,dut.fsm1.state);
 		end
-		
+
 		// Read State --> Give it 10100111 000< Parallel Data out should be equal == 1010011
 		// MISO --> After 2 clock periods, miso should be equal to 1010011
 	  $finish();
