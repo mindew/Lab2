@@ -68,7 +68,7 @@ module SPImemoryTest ();
 
 		// We start with CS high
 		// Test 2
-		// Data: 0000000 and in start state
+		// Data: 0000001 and in start state
 
 		cs_pin = 0;
 		mosi_pin = 0;
@@ -166,8 +166,17 @@ module SPImemoryTest ();
 		mosi_pin = 0;
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
-		$display("memory is %b", dut.dm.memory[dut.dm.address]);
-		$display("State is %b", dut.fsm1.state);
+
+		if(dut.dm.memory[dut.dm.address] == 8'b00110000)begin
+			$display("Test 5b failed. Is %b, should be 8'00110000", dut.dm.memory[dut.dm.address]);
+		end
+		//$display("memory is %b", dut.dm.memory[dut.dm.address]);
+		//$display("State is %b", dut.fsm1.state);
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+		sclk_pin = 0; #1000
+		sclk_pin = 1; #1000
+
 		sclk_pin = 0; #1000
 		sclk_pin = 1; #1000
 
